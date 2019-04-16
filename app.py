@@ -11,8 +11,21 @@ from models import db, Jurisdicionado, Responsavel,\
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
+POSTGRES = {
+    'user': 'postgres',
+    'password': 'secret',
+    'db': 'postgres',
+    'host': 'db',
+    'port': '5432',
+}
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
 app.config['SECRET_KEY'] = 'mysecret'
+
+
+
 db.init_app(app)
 admin = Admin(app, name='Cadastro', template_mode='bootstrap3')
 
