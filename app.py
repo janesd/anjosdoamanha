@@ -11,16 +11,16 @@ from models import db, Jurisdicionado, Responsavel,\
 
 app = Flask(__name__)
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
-POSTGRES = {
-    'user': 'postgres',
-    'password': 'secret',
-    'db': 'postgres',
-    'host': 'db',
-    'port': '5432',
-}
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
+# POSTGRES = {
+#     'user': 'postgres',
+#     'password': 'secret',
+#     'db': 'postgres',
+#     'host': 'db',
+#     'port': '5432',
+# }
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 app.config['SECRET_KEY'] = 'mysecret'
 
@@ -96,4 +96,4 @@ admin.add_view(ModelView(Entrada, db.session, category="Doacao"))
 admin.add_view(ModelView(Saida, db.session, category="Doacao"))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
