@@ -97,7 +97,7 @@ class Demanda(db.Model):
     servidor_resp = db.Column(db.String(100))
     def __repr__(self):
         
-        return '<id:{}>'.format(self.id)
+        return '<demanda:{}, {}>'.format(self.id, self.status_cumprimento)
 
 
 class Unidade_solicitante(db.Model):

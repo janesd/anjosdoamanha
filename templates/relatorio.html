@@ -288,54 +288,26 @@
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                              <table name="demands" class="table table-hover">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Quantidade</th>
-                                    <th scope="col">Expandir</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <th scope="row">1</th>
-                                    <td>No prazo</td>
-                                    <td>30</td>
-                                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">2</th>
-                                    <td>Em risco</td>
-                                    <td>16</td>
-                                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">3</th>
-                                    <td>Fora do prazo</td>
-                                    <td>15</td>
-                                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">4</th>
-                                    <td>Pendente</td>
-                                    <td>80</td>
-                                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">5</th>
-                                    <td>Recursos Incompatíveis</td>
-                                    <td>15</td>
-                                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">6</th>
-                                    <td>Perfil Incompativel</td>
-                                    <td>2</td>
-                                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                                <table name="demands" class="table table-hover">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Status</th>
+                                      <th scope="col">Quantidade</th>
+                                      <th scope="col">Expandir</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      {% for key, value in statuses.items() %}
+                                        
+                                      <tr>
+                                          <td>{{ key }}</td>
+                                          <td>{{ value }}</td>
+                                          <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
+                                        </tr>
+                                      {% endfor %}
+                                  </tbody>
+                                </table>
+
                             </div>
                           </div>
                         </div>
