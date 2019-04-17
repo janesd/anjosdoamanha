@@ -96,7 +96,8 @@ class Demanda(db.Model):
     sugestao_da_instituicao = db.Column(db.String(200))
     servidor_resp = db.Column(db.String(100))
     def __repr__(self):
-        return '%r' % self.vinculo_id
+        
+        return '<id:{}>'.format(self.id)
 
 
 class Unidade_solicitante(db.Model):

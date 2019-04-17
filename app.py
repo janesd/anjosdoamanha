@@ -36,10 +36,9 @@ def home():
 
 @app.route("/relatorio")
 def relatorio():
-    #
-    # demandas = session.query(Demanda, )
-
-    return render_template('relatorio.html')
+    demandas = Demanda.query.all()
+    # filter_by status
+    return render_template('relatorio.html', demandas=demandas)
 
 
 class JurisdicionadoView(ModelView):
@@ -96,4 +95,4 @@ admin.add_view(ModelView(Entrada, db.session, category="Doacao"))
 admin.add_view(ModelView(Saida, db.session, category="Doacao"))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
