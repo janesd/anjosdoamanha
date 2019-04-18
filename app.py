@@ -37,17 +37,24 @@ def home():
 @app.route("/relatorio")
 def relatorio():
     status = {}
-    status['no prazo'] = Demanda.query.filter_by(status_cumprimento=1).count()
-    status['em risco'] = Demanda.query.filter_by(status_cumprimento=2).count()
-    status['fora do prazo'] = Demanda.query.filter_by(status_cumprimento=3).count()
-    status['pendente'] = Demanda.query.filter_by(status_cumprimento=4).count()
-    status['recursos indisponivel'] = Demanda.query.filter_by(status_cumprimento=5).count()
-    status['perfil incompativel'] = Demanda.query.filter_by(status_cumprimento=6).count()
+    no_prazo = Demanda.query.filter_by(status_cumprimento=1)
+    emrisco = Demanda.query.filter_by(status_cumprimento=2)
+    foradoprazo = Demanda.query.filter_by(status_cumprimento=3)
+    pendente = Demanda.query.filter_by(status_cumprimento=4)
+    indisponivel = Demanda.query.filter_by(status_cumprimento=5)
+    incompativel = Demanda.query.filter_by(status_cumprimento=6)
+    status['no prazo'] = no_prazo.count()
+    status['em risco'] = emrisco.count()
+    status['fora do prazo'] = foradoprazo.count()
+    status['pendente'] = pendente.count()
+    status['recursos indisponivel'] = indisponivel.count()
+    status['perfil incompativel'] = incompativel.count()
     # filter_by status
     #import pdb;pdb.set_trace()
 
 
-    return render_template('relatorio.html', statuses=status)
+    return render_template('relatorio.html', statuses=status, no_prazo=no_prazo, pendente=pendente,
+    emrisco=emrisco, foradoprazo=foradoprazo, indisponivel=indisponivel, incompativel=incompativel)
 
 
 class JurisdicionadoView(ModelView):

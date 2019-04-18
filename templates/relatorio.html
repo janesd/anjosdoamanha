@@ -183,8 +183,8 @@
                                         
                                       <tr>
                                           <td>{{ key }}</td>
-                                          <td>{{ value }}</td>
-                                          <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">expandir</button></td>
+                                          <td>{{ value }}</td> # 
+                                          <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="{{ loop.cycle( '#noprazoModal', '#emriscoModal', '#foradoprazoModal', '#pendenteModal', '#indisponivelModal', '#incompativelModal') }}">expandir</button></td>
                                         </tr>
                                       {% endfor %}
                                   </tbody>
@@ -232,18 +232,37 @@
               </div>
 
       
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <!-- Modal pendente -->
+      <div class="modal fade" id="pendenteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Demanda</h5>
+              <h5 class="modal-title" >Demanda: No prazo</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              ...
+              <table name="demands" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Beneficiário</th>
+                    <th scope="col">Nr Process0</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for demanda in pendente %}
+                  <tr>
+                    <td>{{ demanda.vinculo_id }}</td>
+                    <td>{{ demanda.nr_processo }}</td>
+                    <td>{{ demanda.data_solicitacao }}</td>
+                    <td>{{ demanda.descricao_solicitacao }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -251,7 +270,197 @@
           </div>
         </div>
       </div>
-
+      <!--end modal pendente-->
+      <!-- Modal no prazo -->
+      <div class="modal fade" id="noprazoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" >Demanda: No prazo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <table name="demands" class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Beneficiário</th>
+                      <th scope="col">Nr Process0</th>
+                      <th scope="col">Data</th>
+                      <th scope="col">Descrição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for demanda in noprazo %}
+                    <tr>
+                      <td>{{ demanda.vinculo_id }}</td>
+                      <td>{{ demanda.nr_processo }}</td>
+                      <td>{{ demanda.data_solicitacao }}</td>
+                      <td>{{ demanda.descricao_solicitacao }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+      </div><!--end modal no prazo-->
+      <!-- Modal em risco -->
+      <div class="modal fade" id="emriscoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" >Demanda: Em risco</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table name="demands" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Beneficiário</th>
+                    <th scope="col">Nr Process0</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for demanda in emrisco %}
+                  <tr>
+                    <td>{{ demanda.vinculo_id }}</td>
+                    <td>{{ demanda.nr_processo }}</td>
+                    <td>{{ demanda.data_solicitacao }}</td>
+                    <td>{{ demanda.descricao_solicitacao }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal fora do prazo -->
+      <div class="modal fade" id="foradoprazoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" >Demanda: Fora do prazo</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table name="demands" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Beneficiário</th>
+                    <th scope="col">Nr Process0</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for demanda in foradoprazo %}
+                  <tr>
+                    <td>{{ demanda.vinculo_id }}</td>
+                    <td>{{ demanda.nr_processo }}</td>
+                    <td>{{ demanda.data_solicitacao }}</td>
+                    <td>{{ demanda.descricao_solicitacao }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal indisponivel -->
+      <div class="modal fade" id="indisponivelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" >Demanda: Indisponivel</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table name="demands" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Beneficiário</th>
+                    <th scope="col">Nr Process0</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for demanda in indisponivel %}
+                  <tr>
+                    <td>{{ demanda.vinculo_id }}</td>
+                    <td>{{ demanda.nr_processo }}</td>
+                    <td>{{ demanda.data_solicitacao }}</td>
+                    <td>{{ demanda.descricao_solicitacao }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal incompativel -->
+      <div class="modal fade" id="incompativelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" >Demanda: Incompativel</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table name="demands" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Beneficiário</th>
+                    <th scope="col">Nr Process0</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for demanda in incompativel %}
+                  <tr>
+                    <td>{{ demanda.vinculo_id }}</td>
+                    <td>{{ demanda.nr_processo }}</td>
+                    <td>{{ demanda.data_solicitacao }}</td>
+                    <td>{{ demanda.descricao_solicitacao }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <footer>
             <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
