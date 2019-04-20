@@ -111,4 +111,4 @@ admin.add_view(ModelView(Entrada, db.session, category="Doacao"))
 admin.add_view(ModelView(Saida, db.session, category="Doacao"))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
