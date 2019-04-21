@@ -11,16 +11,18 @@ from models import db, Jurisdicionado, Responsavel,\
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
-# POSTGRES = {
-#     'user': 'postgres',
-#     'password': 'secret',
-#     'db': 'postgres',
-#     'host': 'db',
-#     'port': '5432',
-# }
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+DOCKER = False
+if DOCKER:
+    POSTGRES = {
+        'user': 'postgres',
+        'password': 'secret',
+        'db': 'postgres',
+        'host': 'db',
+        'port': '5432',
+    }
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(password)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
 
 app.config['SECRET_KEY'] = 'mysecret'
 
