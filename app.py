@@ -11,18 +11,16 @@ from models import db, Jurisdicionado, Responsavel,\
 
 app = Flask(__name__)
 
-DOCKER = False
-if DOCKER:
-    POSTGRES = {
-        'user': 'postgres',
-        'password': 'secret',
-        'db': 'postgres',
-        'host': 'db',
-        'port': '5432',
-    }
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(password)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///anjosdados.db'
+# POSTGRES = {
+#     'user': 'postgres',
+#     'password': 'secret',
+#     'db': 'postgres',
+#     'host': 'db',
+#     'port': '5432',
+# }
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
 app.config['SECRET_KEY'] = 'mysecret'
 
@@ -38,26 +36,47 @@ def home():
 
 @app.route("/relatorio")
 def relatorio():
-    status = {}
+
+    # verificando os diferentes tipos de status existentes no arquivo Demanda
+    tipo_de_status = []
+    for value in Demanda.query.group_by(Demanda.status_cumprimento):
+        tipo_de_status.append(value.status_cumprimento)
+
+    # qtde_por_status: chave = tipo de status,
+    #                  valor = qtde de registros com status igual ao da chave
+    qtde_por_status = {}
+    colecoes_por_status = {}
+    for n in tipo_de_status:
+        provisorio = Demanda.query.filter_by(status_cumprimento = '%s' %(n))
+        if n == '1':
+            nome_status = "no prazo"
+        elif n == '2':
+            nome_status = "em risco"
+        elif n == '3':
+            nome_status = "fora do prazo"
+        elif n == '4':
+            nome_status = "pendente"
+        elif n == '5':
+            nome_status = "recurso indisponivel"
+        elif n == '6':
+            nome_status = "perfil incompativel"
+        else:
+            nome_status = "nao definido"
+        qtde_por_status[nome_status] = provisorio.count()
+        colecoes_por_status[nome_status] = provisorio
+
+
     no_prazo = Demanda.query.filter_by(status_cumprimento=1)
     emrisco = Demanda.query.filter_by(status_cumprimento=2)
     foradoprazo = Demanda.query.filter_by(status_cumprimento=3)
     pendente = Demanda.query.filter_by(status_cumprimento=4)
     indisponivel = Demanda.query.filter_by(status_cumprimento=5)
     incompativel = Demanda.query.filter_by(status_cumprimento=6)
-    status['no prazo'] = no_prazo.count()
-    status['em risco'] = emrisco.count()
-    status['fora do prazo'] = foradoprazo.count()
-    status['pendente'] = pendente.count()
-    status['recursos indisponivel'] = indisponivel.count()
-    status['perfil incompativel'] = incompativel.count()
+
     # filter_by status
     #import pdb;pdb.set_trace()
 
-
-    return render_template('relatorio.html', statuses=status, no_prazo=no_prazo, pendente=pendente,
-    emrisco=emrisco, foradoprazo=foradoprazo, indisponivel=indisponivel, incompativel=incompativel)
-
+    return render_template('relatorio.html', statuses=qtde_por_status, colecoes=colecoes_por_status, no_prazo=no_prazo, pendente=pendente, emrisco=emrisco, foradoprazo=foradoprazo, incompativel=incompativel, indisponivel=indisponivel)
 
 class JurisdicionadoView(ModelView):
     column_searchable_list = ['nome']
@@ -113,4 +132,4 @@ admin.add_view(ModelView(Entrada, db.session, category="Doacao"))
 admin.add_view(ModelView(Saida, db.session, category="Doacao"))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
