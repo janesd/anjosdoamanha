@@ -17,27 +17,77 @@ def home():
     return render_template('index.html')
 
 
-@app.route("/relatorio")
-def relatorio():
-    status = {}
-    no_prazo = Demanda.query.filter_by(status_cumprimento=1)
-    emrisco = Demanda.query.filter_by(status_cumprimento=2)
-    foradoprazo = Demanda.query.filter_by(status_cumprimento=3)
-    pendente = Demanda.query.filter_by(status_cumprimento=4)
-    indisponivel = Demanda.query.filter_by(status_cumprimento=5)
-    incompativel = Demanda.query.filter_by(status_cumprimento=6)
-    status['no prazo'] = no_prazo.count()
-    status['em risco'] = emrisco.count()
-    status['fora do prazo'] = foradoprazo.count()
-    status['pendente'] = pendente.count()
-    status['recursos indisponivel'] = indisponivel.count()
-    status['perfil incompativel'] = incompativel.count()
+@app.route("/relatorio_capacitacao")
+def relatorio_capacitacao():
+
+    # verificando os diferentes tipos de status existentes no arquivo Demanda
+    tipo_de_status = []
+    for value in Demanda.query.group_by(Demanda.status_cumprimento):
+        tipo_de_status.append(value.status_cumprimento)
+
+    # qtde_por_status: chave = tipo de status,
+    #                  valor = qtde de registros com status igual ao da chave
+    qtde_por_status = {}
+    colecoes_por_status = {}
+    for n in tipo_de_status:
+        provisorio = Demanda.query.filter_by(pasta=2, status_cumprimento = '%s' %(n))
+        if n == '1':
+            nome_status = "no_prazo"
+        elif n == '2':
+            nome_status = "em_risco"
+        elif n == '3':
+            nome_status = "fora_do_prazo"
+        elif n == '4':
+            nome_status = "pendente"
+        elif n == '5':
+            nome_status = "recurso_indisponivel"
+        elif n == '6':
+            nome_status = "perfil_incompativel"
+        else:
+            nome_status = "nao_definido"
+        qtde_por_status[nome_status] = provisorio.count()
+        colecoes_por_status[nome_status] = provisorio
+
     # filter_by status
     #import pdb;pdb.set_trace()
 
+    return render_template('relatorio.html', titulo_pasta='Profissionalização/Capacitação', statuses=qtde_por_status, colecoes=colecoes_por_status)
 
-    return render_template('relatorio.html', statuses=status, no_prazo=no_prazo, pendente=pendente,
-    emrisco=emrisco, foradoprazo=foradoprazo, indisponivel=indisponivel, incompativel=incompativel)
+@app.route("/relatorio_saude")
+def relatorio_saude():
+    # verificando os diferentes tipos de status existentes no arquivo Demanda
+    tipo_de_status = []
+    for value in Demanda.query.group_by(Demanda.status_cumprimento):
+        tipo_de_status.append(value.status_cumprimento)
+
+    # qtde_por_status: chave = tipo de status,
+    #                  valor = qtde de registros com status igual ao da chave
+    qtde_por_status = {}
+    colecoes_por_status = {}
+    for n in tipo_de_status:
+        provisorio = Demanda.query.filter_by(pasta=1, status_cumprimento='%s' % (n))
+        if n == '1':
+            nome_status = "no_prazo"
+        elif n == '2':
+            nome_status = "em_risco"
+        elif n == '3':
+            nome_status = "fora_do_prazo"
+        elif n == '4':
+            nome_status = "pendente"
+        elif n == '5':
+            nome_status = "recurso_indisponivel"
+        elif n == '6':
+            nome_status = "perfil_incompativel"
+        else:
+            nome_status = "nao_definido"
+        qtde_por_status[nome_status] = provisorio.count()
+        colecoes_por_status[nome_status] = provisorio
+
+    # filter_by status
+    # import pdb;pdb.set_trace()
+
+    return render_template('relatorio.html',titulo_pasta='Saúde', statuses=qtde_por_status, colecoes=colecoes_por_status)
+
 
 
 class JurisdicionadoView(ModelView):
