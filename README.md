@@ -30,9 +30,9 @@ Install project dependencies
     pip install -r requirements.txt
 ```
 
-Run localhost server
+Run localhost development server
 ```
-    flask run
+    python app.py
 ```
 
 ## Running with Docker
