@@ -210,18 +210,12 @@
                                         </tr>
                                       </thead>
                                       <tbody>
+                                          {% for key, vinculacao in vinculacoes.items() %}
                                           <tr>
-                                              <td>Contratado</td>
-                                              <td>10</td> 
+                                              <td>{{ key }}</td>
+                                              <td>{{ vinculacao|length }}</td> 
                                           </tr>
-                                          <tr>
-                                              <td>Matriculado</td>
-                                              <td>2</td> 
-                                          </tr>
-                                          <tr>
-                                              <td>Desligado</td>
-                                              <td>15</td> 
-                                          </tr>
+                                          {% endfor %}
                                       </tbody>
                                     </table>
                                 </div>
