@@ -5,7 +5,7 @@ from anjosdoamanha.models import db
 from anjosdoamanha import app
 
 MIGRATION_DIR = os.path.join('anjosdoamanha', 'migrations')
-
+#import pdb;pdb.set_trace()
 manager = Manager(app)
 migrate = Migrate(app, db, directory=MIGRATION_DIR)
 
