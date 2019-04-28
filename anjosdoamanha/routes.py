@@ -8,6 +8,7 @@ from anjosdoamanha.models import ( Demanda, Jurisdicionado, Responsavel,
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask import render_template
+from anjosdoamanha.utils import VinculacoesChoices
 
 admin = Admin(app, name='Cadastro', template_mode='bootstrap3')
 
@@ -25,10 +26,12 @@ def relatorio_capacitacao():
     for value in Demanda.query.group_by(Demanda.status_cumprimento):
         tipo_de_status.append(value.status_cumprimento)
 
+    
     # qtde_por_status: chave = tipo de status,
     #                  valor = qtde de registros com status igual ao da chave
     qtde_por_status = {}
     colecoes_por_status = {}
+    #TODO enum
     for n in tipo_de_status:
         provisorio = Demanda.query.filter_by(pasta=2, status_cumprimento = '%s' %(n))
         if n == '1':
@@ -48,10 +51,16 @@ def relatorio_capacitacao():
         qtde_por_status[nome_status] = provisorio.count()
         colecoes_por_status[nome_status] = provisorio
 
-    # filter_by status
-    #import pdb;pdb.set_trace()
+    vinculacoes_statuses = list(VinculacoesChoices)
+    vinculacoes_by_status = {}
+    for status in vinculacoes_statuses:
+        vinculacoes_by_status[status.value] = Vinculacao.query.filter_by(status=status.value).all()
 
-    return render_template('relatorio.html', titulo_pasta='Profissionalização/Capacitação', statuses=qtde_por_status, colecoes=colecoes_por_status)
+    return render_template('relatorio.html', 
+                            titulo_pasta='Profissionalização/Capacitação', 
+                            statuses=qtde_por_status, 
+                            colecoes=colecoes_por_status,
+                            vinculacoes=vinculacoes_by_status)
 
 @app.route("/relatorio_saude")
 def relatorio_saude():
@@ -84,7 +93,7 @@ def relatorio_saude():
         colecoes_por_status[nome_status] = provisorio
 
     # filter_by status
-    # import pdb;pdb.set_trace()
+
 
     return render_template('relatorio.html',titulo_pasta='Saúde', statuses=qtde_por_status, colecoes=colecoes_por_status)
 

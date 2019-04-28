@@ -1,10 +1,19 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import event
+from sqlalchemy import event, Enum
 from pycpfcnpj import cpfcnpj
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm.session import object_session
+from anjosdoamanha.utils import VinculacoesChoices
+from anjosdoamanha import app
+from flask_migrate import Migrate
+import os
 
-db = SQLAlchemy()
+MIGRATION_DIR = os.path.join('anjosdoamanha', 'migrations')
+
+db = SQLAlchemy(app)
+
+migrate = Migrate(app, db, directory=MIGRATION_DIR)
+
 
 
 class BaseModel(db.Model):
@@ -128,9 +137,12 @@ class Vinculacao(db.Model):
     parceiro_id = db.Column(db.Integer, db.ForeignKey('parceiro.id'))
     demanda = db.relationship(Demanda, backref=backref('vinculacao', cascade='all, delete-orphan'))
     parceiro = db.relationship(Parceiro, backref=backref('vinculacao', cascade='all, delete-orphan'))
-    status = db.Column(db.String(20))
+    status = db.Column(Enum(VinculacoesChoices))
     data_ini = db.Column(db.String(20))
     data_fim = db.Column(db.String(20))
+
+    def __repr__(self):
+        return "< Vinculacao:{} status:{}>".format(self.id, self.status)
 
 
 # ------- Voluntário Pessoa Física ----------
